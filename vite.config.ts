@@ -11,16 +11,5 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: 'es2020',
-    // Split the heavy 3D libraries into their own chunk so the initial
-    // HTML/HUD paints fast and Three.js streams in behind the "Press Start" gate.
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ['three'],
-          r3f: ['@react-three/fiber', '@react-three/drei', '@react-three/cannon'],
-        },
-      },
-    },
-    chunkSizeWarningLimit: 1200,
   },
 });

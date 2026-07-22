@@ -1,174 +1,115 @@
 import { useEffect } from 'react';
 import { useGame } from '../store';
 import { audio } from '../audio/AudioEngine';
-import { PROJECTS } from '../data/content';
+import { findLevel, findWorldOfLevel } from '../data/content';
 
-// Modal "level briefing" that appears when a project kiosk is activated.
+// Modal "level briefing" — shown from the map's ℹ button and on level clear.
+// Now includes the per-project programming-language breakdown.
 export default function ProjectPanel({ id }: { id: string }) {
   const closePanel = useGame((s) => s.closePanel);
-  const project = PROJECTS.find((p) => p.id === id);
+  const playLevel = useGame((s) => s.playLevel);
+  const level = findLevel(id);
+  const world = findWorldOfLevel(id);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        audio.sfx('click');
-        closePanel();
-      }
+      if (e.key === 'Escape') { audio.sfx('click'); closePanel(); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [closePanel]);
 
-  if (!project) return null;
-
-  const locked = project.status === 'locked';
+  if (!level || !world) return null;
+  const locked = level.status === 'locked';
 
   return (
     <div style={styles.backdrop} onClick={closePanel}>
-      <div
-        style={{ ...styles.panel, borderColor: project.color }}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label={`Level ${project.level}: ${project.title}`}
-      >
+      <div style={{ ...styles.panel, borderColor: level.color }}
+           onClick={(e) => e.stopPropagation()}
+           role="dialog" aria-modal="true"
+           aria-label={`Level ${world.index}-${level.index}: ${level.title}`}>
         <div style={styles.header}>
-          <span className="mono" style={{ ...styles.badge, background: project.color }}>
-            LEVEL {project.level}
+          <span className="mono" style={{ ...styles.badge, background: level.color }}>
+            LEVEL {world.index}-{level.index}
           </span>
-          <span
-            className="mono"
-            style={{
-              ...styles.status,
-              color: locked ? '#64748b' : project.color,
-              borderColor: locked ? '#64748b' : project.color,
-            }}
-          >
-            {locked ? '🔒 LOCKED' : project.status === 'live' ? '● LIVE' : '◐ BUILDING'}
+          <span className="mono" style={{ ...styles.status, color: locked ? '#64748b' : level.color, borderColor: locked ? '#64748b' : level.color }}>
+            {locked ? '🔒 LOCKED' : level.status === 'live' ? '● LIVE' : '◐ BUILDING'}
           </span>
-          <button className="btn" style={styles.close} onClick={closePanel} aria-label="Close">
-            ✕
-          </button>
+          <button className="btn" style={styles.close} onClick={closePanel} aria-label="Close">✕</button>
         </div>
 
-        <h2 className="mono neon-text" style={{ ...styles.title, color: project.color }}>
-          {project.title}
-        </h2>
-        <p style={styles.summary}>{project.summary}</p>
+        <div className="mono" style={styles.worldLine}>🎓 {world.cert}</div>
+        <h2 className="mono neon-text" style={{ ...styles.title, color: level.color }}>{level.title}</h2>
+        <p style={styles.summary}>{level.summary}</p>
 
         {!locked && (
           <>
             <div style={styles.tags}>
-              {project.tags.map((t) => (
-                <span key={t} className="mono" style={styles.tag}>
-                  {t}
-                </span>
-              ))}
+              {level.tags.map((t) => <span key={t} className="mono" style={styles.tag}>{t}</span>)}
             </div>
 
-            <h3 className="mono" style={styles.sectionTitle}>
-              ⚙ TECH STACK
-            </h3>
-            <ul style={styles.stackList}>
-              {project.stack.map((s) => (
-                <li key={s} className="mono" style={styles.stackItem}>
-                  ▹ {s}
-                </li>
-              ))}
+            <h3 className="mono" style={styles.sectionTitle}>⚙ TECH STACK</h3>
+            <ul style={styles.list}>
+              {level.stack.map((s) => <li key={s} className="mono" style={styles.item}>▹ {s}</li>)}
             </ul>
 
-            <h3 className="mono" style={styles.sectionTitle}>
-              ▤ MISSION BRIEFING
-            </h3>
-            <p style={styles.detail}>{project.detail}</p>
-
-            <div style={styles.links}>
-              {project.repoUrl && (
-                <a
-                  className="btn"
-                  href={project.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => audio.sfx('click')}
-                >
-                  ⌥ View Code ↗
-                </a>
-              )}
-              {project.demoUrl && (
-                <a
-                  className="btn pink"
-                  href={project.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => audio.sfx('click')}
-                >
-                  ▶ Live Demo ↗
-                </a>
-              )}
-            </div>
+            <h3 className="mono" style={styles.sectionTitle}>▤ MISSION BRIEFING</h3>
+            <p style={styles.detail}>{level.detail}</p>
           </>
         )}
 
-        {locked && (
-          <p className="mono" style={styles.lockedMsg}>
-            {project.detail}
-            <br />
-            <br />
-            🔓 Check back soon — new IT/AI quests are in development.
-          </p>
-        )}
+        {/* Language breakdown — shown for every level, even locked/planned ones */}
+        <div style={{ ...styles.langBox, borderColor: level.color }}>
+          <h3 className="mono" style={{ ...styles.sectionTitle, marginTop: 0, color: level.color }}>
+            💻 LANGUAGE: {level.language.name.toUpperCase()}
+          </h3>
+          <p style={styles.langWhy}><strong style={{ color: '#e6f1ff' }}>Why this language:</strong> {level.language.why}</p>
+          <div className="mono" style={styles.tipsHeader}>🎯 How to level up your {level.language.name}:</div>
+          <ul style={styles.tips}>
+            {level.language.tips.map((t, i) => (
+              <li key={i} style={styles.tip}>⭐ {t}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div style={styles.links}>
+          <button className="btn" onClick={() => { audio.sfx('start'); playLevel(level.id); }}>
+            ▶ {locked ? 'Peek at' : 'Play'} this Level
+          </button>
+          {level.repoUrl && (
+            <a className="btn" href={level.repoUrl} target="_blank" rel="noopener noreferrer"
+               onClick={() => audio.sfx('click')}>⌥ View Code ↗</a>
+          )}
+          {level.demoUrl && (
+            <a className="btn pink" href={level.demoUrl} target="_blank" rel="noopener noreferrer"
+               onClick={() => audio.sfx('click')}>▶ Live Demo ↗</a>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  backdrop: {
-    position: 'fixed',
-    inset: 0,
-    background: 'rgba(3,4,12,0.72)',
-    display: 'grid',
-    placeItems: 'center',
-    zIndex: 300,
-    padding: 16,
-    backdropFilter: 'blur(4px)',
-  },
-  panel: {
-    background: 'var(--panel)',
-    border: '2px solid var(--neon-cyan)',
-    borderRadius: 12,
-    padding: '20px 24px',
-    maxWidth: 640,
-    width: '100%',
-    maxHeight: '86vh',
-    overflowY: 'auto',
-    boxShadow: '0 0 40px rgba(34,211,238,0.25)',
-  },
+  backdrop: { position: 'fixed', inset: 0, background: 'rgba(3,4,12,0.75)', display: 'grid', placeItems: 'center', zIndex: 300, padding: 16, backdropFilter: 'blur(4px)' },
+  panel: { background: 'var(--panel)', border: '2px solid var(--neon-cyan)', borderRadius: 12, padding: '20px 24px', maxWidth: 660, width: '100%', maxHeight: '88vh', overflowY: 'auto', boxShadow: '0 0 40px rgba(34,211,238,0.25)' },
   header: { display: 'flex', alignItems: 'center', gap: 10 },
-  badge: {
-    color: '#06060f',
-    fontWeight: 700,
-    fontSize: 11,
-    padding: '3px 8px',
-    borderRadius: 4,
-  },
+  badge: { color: '#06060f', fontWeight: 700, fontSize: 11, padding: '3px 8px', borderRadius: 4 },
   status: { fontSize: 11, padding: '3px 8px', border: '1px solid', borderRadius: 4 },
   close: { marginLeft: 'auto', padding: '4px 10px', fontSize: 14 },
-  title: { fontSize: 24, margin: '14px 0 6px' },
+  worldLine: { fontSize: 12, color: '#a78bfa', marginTop: 14 },
+  title: { fontSize: 24, margin: '4px 0 6px' },
   summary: { color: '#c7d6ee', lineHeight: 1.6, fontSize: 15 },
   tags: { display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 },
-  tag: {
-    fontSize: 10,
-    padding: '3px 8px',
-    background: 'rgba(167,139,250,0.15)',
-    border: '1px solid rgba(167,139,250,0.4)',
-    borderRadius: 12,
-    color: '#c4b5fd',
-  },
+  tag: { fontSize: 10, padding: '3px 8px', background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.4)', borderRadius: 12, color: '#c4b5fd' },
   sectionTitle: { fontSize: 12, color: '#8aa0c0', marginTop: 20, marginBottom: 6 },
-  stackList: { margin: 0, padding: 0, listStyle: 'none' },
-  stackItem: { fontSize: 13, color: '#c7d6ee', padding: '2px 0' },
+  list: { margin: 0, padding: 0, listStyle: 'none' },
+  item: { fontSize: 13, color: '#c7d6ee', padding: '2px 0' },
   detail: { color: '#c7d6ee', lineHeight: 1.7, fontSize: 14, whiteSpace: 'pre-line' },
+  langBox: { marginTop: 20, padding: '14px 16px', border: '1px solid', borderRadius: 10, background: 'rgba(6,8,20,0.5)' },
+  langWhy: { fontSize: 14, color: '#c7d6ee', lineHeight: 1.7, margin: '0 0 10px' },
+  tipsHeader: { fontSize: 12, color: '#8aa0c0', marginBottom: 6 },
+  tips: { margin: 0, paddingLeft: 0, listStyle: 'none' },
+  tip: { fontSize: 13, color: '#d7e3f5', lineHeight: 1.6, padding: '3px 0' },
   links: { display: 'flex', gap: 12, marginTop: 20, flexWrap: 'wrap' },
-  lockedMsg: { color: '#8aa0c0', lineHeight: 1.7, marginTop: 16, fontSize: 14 },
 };

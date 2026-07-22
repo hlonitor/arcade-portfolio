@@ -1,9 +1,9 @@
 {
   "name": "arcade-portfolio",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
-  "description": "Gamified 3D IT & AI portfolio for Lydron Mohohlo",
+  "description": "Gamified Mario-style 2D platformer IT & AI portfolio for Lydron Mohohlo",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -12,18 +12,13 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
-    "@react-three/cannon": "^6.6.0",
-    "@react-three/drei": "^9.114.3",
-    "@react-three/fiber": "^8.17.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "three": "^0.169.0",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@types/three": "^0.169.0",
     "@vitejs/plugin-react": "^4.3.3",
     "typescript": "^5.6.3",
     "vite": "^5.4.10"

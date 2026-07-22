@@ -14,7 +14,7 @@ export default function BootScreen() {
     audio.sfx('start');
     toggleAudio(); // turns audio ON
     setBooting(true);
-    // Brief boot animation, then drop into the 3D hub.
+    // Brief boot animation, then drop into the world map.
     window.setTimeout(() => start(), 700);
   };
 
@@ -27,7 +27,7 @@ export default function BootScreen() {
     <div style={styles.wrap} role="dialog" aria-label="Start screen">
       <div style={styles.crt}>
         <p className="mono" style={styles.system}>
-          &gt; INITIALIZING PORTFOLIO_OS v1.0 ...
+          &gt; INITIALIZING PORTFOLIO_OS v2.0 ...
         </p>
         <h1 className="mono neon-text" style={styles.title}>
           {PROFILE.name.toUpperCase()}
@@ -52,9 +52,11 @@ export default function BootScreen() {
               </button>
             </div>
             <p className="mono" style={styles.hint}>
-              Move: WASD / Arrow keys · Look: drag · Interact: walk into a kiosk
+              Pick a World (a certification), then run &amp; jump through its Levels.
               <br />
-              Audio will start with the game — toggle it anytime in the HUD.
+              Move: ← → / A D · Jump: ↑ / W / Space · Reach the 🚩 flag to clear a level.
+              <br />
+              Headbutt ? -blocks for dev wisdom · dodge the meme booby-traps 😄
             </p>
           </>
         ) : (

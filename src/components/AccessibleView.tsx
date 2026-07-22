@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGame } from '../store';
 import { audio } from '../audio/AudioEngine';
-import { PROFILE, SKILLS, PROJECTS, CERTIFICATIONS } from '../data/content';
+import { PROFILE, SKILLS, WORLDS, CERTIFICATIONS } from '../data/content';
 import AccessibleContact from './AccessibleContact';
 
 // A fully static, screen-reader-friendly, motion-free rendering of ALL portfolio
@@ -41,7 +41,7 @@ export default function AccessibleView() {
               exitAccessible();
             }}
           >
-            ▶ Enter 3D Arcade
+            ▶ Enter the Arcade
           </button>
         </nav>
       </header>
@@ -80,58 +80,99 @@ export default function AccessibleView() {
           </ul>
         </section>
 
-        <section aria-labelledby="proj-h" style={styles.section}>
-          <h2 id="proj-h" style={styles.h2}>
-            Projects
+        <section aria-labelledby="worlds-h" style={styles.section}>
+          <h2 id="worlds-h" style={styles.h2}>
+            Worlds &amp; Projects
           </h2>
-          <div style={styles.grid}>
-            {PROJECTS.map((p) => (
-              <article
-                key={p.id}
-                style={{
-                  ...styles.projCard,
-                  borderColor: p.status === 'locked' ? '#334155' : p.color,
-                  opacity: p.status === 'locked' ? 0.6 : 1,
-                }}
-              >
-                <div style={styles.projTop}>
-                  <span style={{ ...styles.level, background: p.color }}>L{p.level}</span>
-                  <span style={styles.projStatus}>
-                    {p.status === 'locked'
-                      ? '🔒 Locked'
-                      : p.status === 'live'
-                        ? '● Live'
-                        : '◐ Building'}
-                  </span>
-                </div>
-                <h3 style={styles.h3}>{p.title}</h3>
-                <p style={styles.p}>{p.summary}</p>
-                {p.status !== 'locked' && (
-                  <>
-                    <p style={styles.stackLine}>
-                      <strong>Stack:</strong> {p.stack.join(' · ')}
-                    </p>
-                    <details style={styles.details}>
-                      <summary style={styles.summary}>Mission briefing</summary>
-                      <p style={{ ...styles.p, whiteSpace: 'pre-line' }}>{p.detail}</p>
-                    </details>
-                    <div style={styles.projLinks}>
-                      {p.repoUrl && (
-                        <a href={p.repoUrl} target="_blank" rel="noopener noreferrer">
-                          View code ↗
-                        </a>
-                      )}
-                      {p.demoUrl && (
-                        <a href={p.demoUrl} target="_blank" rel="noopener noreferrer">
-                          Live demo ↗
-                        </a>
-                      )}
+          <p style={styles.p}>
+            Each <strong>World</strong> is an AWS certification; the{' '}
+            <strong>Levels</strong> under it are the projects in that area.
+          </p>
+          {WORLDS.map((world) => (
+            <div key={world.id} style={styles.worldBlock}>
+              <h3 style={{ ...styles.h3, color: world.color }}>
+                {world.name}
+              </h3>
+              <p style={styles.certLine}>
+                🎓 {world.cert} —{' '}
+                <strong>
+                  {world.certStatus === 'earned'
+                    ? 'earned ✅'
+                    : world.certStatus === 'in-progress'
+                      ? 'in progress ⏳'
+                      : 'planned'}
+                </strong>
+              </p>
+              <div style={styles.grid}>
+                {world.levels.map((p) => (
+                  <article
+                    key={p.id}
+                    style={{
+                      ...styles.projCard,
+                      borderColor: p.status === 'locked' ? '#334155' : p.color,
+                      opacity: p.status === 'locked' ? 0.7 : 1,
+                    }}
+                  >
+                    <div style={styles.projTop}>
+                      <span style={{ ...styles.level, background: p.status === 'locked' ? '#334155' : p.color }}>
+                        {world.index}-{p.index}
+                      </span>
+                      <span style={styles.projStatus}>
+                        {p.status === 'locked'
+                          ? '🔒 Locked'
+                          : p.status === 'live'
+                            ? '● Live'
+                            : '◐ Building'}
+                      </span>
                     </div>
-                  </>
-                )}
-              </article>
-            ))}
-          </div>
+                    <h4 style={styles.h4}>{p.title}</h4>
+                    <p style={styles.p}>{p.summary}</p>
+                    {p.status !== 'locked' && (
+                      <>
+                        <p style={styles.stackLine}>
+                          <strong>Stack:</strong> {p.stack.join(' · ')}
+                        </p>
+                        <details style={styles.details}>
+                          <summary style={styles.summary}>Mission briefing</summary>
+                          <p style={{ ...styles.p, whiteSpace: 'pre-line' }}>{p.detail}</p>
+                        </details>
+                      </>
+                    )}
+                    <details style={styles.details}>
+                      <summary style={styles.summary}>
+                        💻 Language: {p.language.name}
+                      </summary>
+                      <p style={styles.p}>
+                        <strong>Why:</strong> {p.language.why}
+                      </p>
+                      <p style={{ ...styles.p, marginBottom: 4 }}>
+                        <strong>Tips to improve:</strong>
+                      </p>
+                      <ul style={styles.tipList}>
+                        {p.language.tips.map((t, i) => (
+                          <li key={i} style={styles.p}>{t}</li>
+                        ))}
+                      </ul>
+                    </details>
+                    {(p.repoUrl || p.demoUrl) && (
+                      <div style={styles.projLinks}>
+                        {p.repoUrl && (
+                          <a href={p.repoUrl} target="_blank" rel="noopener noreferrer">
+                            View code ↗
+                          </a>
+                        )}
+                        {p.demoUrl && (
+                          <a href={p.demoUrl} target="_blank" rel="noopener noreferrer">
+                            Live demo ↗
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))}
         </section>
 
         <section aria-labelledby="cert-h" style={styles.section}>
@@ -170,12 +211,12 @@ export default function AccessibleView() {
 
       <footer style={styles.footer}>
         <p style={styles.p}>
-          © {PROFILE.name} · Built with React Three Fiber. This is the accessible
-          2D view — <button
+          © {PROFILE.name} · A gamified platformer portfolio. This is the
+          accessible 2D document view — <button
             style={styles.linkBtn}
             onClick={() => exitAccessible()}
           >
-            switch to the 3D arcade
+            switch to the playable arcade
           </button>
           .
         </p>
@@ -217,8 +258,12 @@ const styles: Record<string, React.CSSProperties> = {
     paddingLeft: 12,
     color: 'var(--neon-cyan)',
   },
-  h3: { fontSize: 18, margin: '4px 0 8px' },
+  h3: { fontSize: 19, margin: '18px 0 4px' },
+  h4: { fontSize: 16, margin: '4px 0 8px' },
   p: { lineHeight: 1.7, color: '#c7d6ee' },
+  worldBlock: { marginBottom: 28 },
+  certLine: { fontSize: 13, color: '#c7d6ee', margin: '0 0 12px' },
+  tipList: { margin: '0 0 8px', paddingLeft: 20 },
   skillList: { listStyle: 'none', padding: 0, display: 'grid', gap: 14 },
   skillItem: {},
   skillHead: { display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 4 },
