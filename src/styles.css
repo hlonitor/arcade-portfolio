@@ -1,0 +1,161 @@
+:root {
+  --bg: #06060f;
+  --neon-cyan: #22d3ee;
+  --neon-pink: #f472b6;
+  --neon-purple: #a78bfa;
+  --neon-green: #34d399;
+  --amber: #ff9900;
+  --text: #e6f1ff;
+  --muted: #8aa0c0;
+  --panel: rgba(10, 12, 28, 0.86);
+  --panel-border: rgba(120, 200, 255, 0.35);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+#root {
+  position: relative;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+/* Monospace "arcade" font stack for HUD elements */
+.mono {
+  font-family: 'Courier New', ui-monospace, monospace;
+  letter-spacing: 0.5px;
+}
+
+.neon-text {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 6px rgba(34, 211, 238, 0.8),
+    0 0 18px rgba(34, 211, 238, 0.4);
+}
+
+.btn {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text);
+  background: rgba(20, 24, 48, 0.9);
+  border: 2px solid var(--neon-cyan);
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.25);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  background: rgba(34, 211, 238, 0.18);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.6);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn.pink {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 10px rgba(244, 114, 182, 0.3);
+}
+.btn.pink:hover {
+  background: rgba(244, 114, 182, 0.18);
+  box-shadow: 0 0 18px rgba(244, 114, 182, 0.6);
+}
+
+/* Visible keyboard focus everywhere for accessibility */
+:focus-visible {
+  outline: 3px solid var(--neon-pink);
+  outline-offset: 2px;
+}
+
+/* Screen-reader-only helper */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+a {
+  color: var(--neon-cyan);
+}
+
+/* Scanline overlay for the retro CRT vibe (purely decorative) */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.12) 3px,
+    rgba(0, 0, 0, 0) 4px
+  );
+  z-index: 9999;
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .scanlines::after {
+    display: none;
+  }
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 26px rgba(34, 211, 238, 0.9);
+  }
+}
