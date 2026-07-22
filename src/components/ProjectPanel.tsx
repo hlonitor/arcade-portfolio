@@ -3,11 +3,10 @@ import { useGame } from '../store';
 import { audio } from '../audio/AudioEngine';
 import { findLevel, findWorldOfLevel } from '../data/content';
 
-// Modal "level briefing" — shown from the map's ℹ button and on level clear.
-// Now includes the per-project programming-language breakdown.
+// Modal project briefing — shown from the HUD data-node log and when the snake
+// eats a project core. Includes the per-project programming-language breakdown.
 export default function ProjectPanel({ id }: { id: string }) {
   const closePanel = useGame((s) => s.closePanel);
-  const playLevel = useGame((s) => s.playLevel);
   const level = findLevel(id);
   const world = findWorldOfLevel(id);
 
@@ -73,8 +72,8 @@ export default function ProjectPanel({ id }: { id: string }) {
         </div>
 
         <div style={styles.links}>
-          <button className="btn" onClick={() => { audio.sfx('start'); playLevel(level.id); }}>
-            ▶ {locked ? 'Peek at' : 'Play'} this Level
+          <button className="btn" onClick={() => { audio.sfx('click'); closePanel(); }}>
+            ◀ Back to the game
           </button>
           {level.repoUrl && (
             <a className="btn" href={level.repoUrl} target="_blank" rel="noopener noreferrer"

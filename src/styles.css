@@ -89,6 +89,16 @@ canvas {
   box-shadow: 0 0 18px rgba(244, 114, 182, 0.6);
 }
 
+/* On-screen touch controls (D-pad) */
+.btn.ctrl {
+  font-size: 20px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  user-select: none;
+  touch-action: manipulation;
+}
+
 /* Visible keyboard focus everywhere for accessibility */
 :focus-visible {
   outline: 3px solid var(--neon-pink);

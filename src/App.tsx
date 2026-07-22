@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useGame } from './store';
 import BootScreen from './components/BootScreen';
-import WorldMap from './components/WorldMap';
-import Platformer from './game/Platformer';
+import Snake from './game/Snake';
+import Hud from './components/Hud';
 import ProjectPanel from './components/ProjectPanel';
 import ContactTerminal from './components/ContactTerminal';
 import CookieBanner from './components/CookieBanner';
@@ -35,8 +35,12 @@ export default function App() {
   return (
     <div className="scanlines" style={{ height: '100%', width: '100%' }}>
       {mode === 'boot' && <BootScreen />}
-      {mode === 'worldmap' && <WorldMap />}
-      {mode === 'playing' && <Platformer />}
+      {mode === 'playing' && (
+        <>
+          <Snake />
+          <Hud />
+        </>
+      )}
       {mode === 'accessible' && <AccessibleView />}
 
       {/* Overlays available on top of map + gameplay */}

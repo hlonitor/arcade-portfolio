@@ -1,9 +1,9 @@
 {
   "name": "arcade-portfolio",
   "private": true,
-  "version": "2.0.0",
+  "version": "3.0.0",
   "type": "module",
-  "description": "Gamified Mario-style 2D platformer IT & AI portfolio for Lydron Mohohlo",
+  "description": "Gamified Snake-style IT & AI portfolio for Lydron Mohohlo",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

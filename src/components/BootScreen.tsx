@@ -52,11 +52,12 @@ export default function BootScreen() {
               </button>
             </div>
             <p className="mono" style={styles.hint}>
-              Pick a World (a certification), then run &amp; jump through its Levels.
+              Steer the snake · eat data packets to grow · devour glowing ◆ project
+              cores to open their case studies.
               <br />
-              Move: ← → / A D · Jump: ↑ / W / Space · Reach the 🚩 flag to clear a level.
+              Move: ← ↑ ↓ → or W A S D · walls wrap around · don't bite your own tail!
               <br />
-              Headbutt ? -blocks for dev wisdom · dodge the meme booby-traps 😄
+              ? -orbs = dev wisdom · 🐛 bug foods = meme booby-traps (they just shrink you) 😄
             </p>
           </>
         ) : (

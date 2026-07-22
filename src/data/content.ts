@@ -119,20 +119,20 @@ export const WORLDS: World[] = [
         title: 'This Arcade Portfolio',
         status: 'live',
         summary:
-          'The game you are playing right now — a 2D platformer portfolio built with React, a hand-rolled physics engine, and a procedural synthwave soundtrack, auto-deployed to the cloud.',
+          'The game you are playing right now — a Snake-style arcade portfolio built with React, a hand-rolled grid game loop, and a procedural synthwave soundtrack, auto-deployed to the cloud.',
         tags: ['React', 'CI/CD', 'GitHub Pages', 'WebAudio'],
         stack: [
           'React + Vite + TypeScript',
-          'Custom requestAnimationFrame platformer engine',
+          'Custom grid-based Snake engine (requestAnimationFrame)',
           'WebAudio API (procedural music/SFX)',
           'GitHub Actions → GitHub Pages',
         ],
-        detail: `Level 1-1 is this website itself. It's a side-scrolling platformer: run and jump
-through the stage, headbutt ? -blocks for dev wisdom, dodge the booby-traps, and reach the
-flag to read the full case study.
+        detail: `This node is the website itself. It's a Snake game: steer the snake around the grid
+to devour data packets and grow, eat a glowing project node to open its case study, headbutt
+? -pellets for dev wisdom, and dodge the meme booby-trap foods.
 
-Engineered against the AWS Well-Architected pillars: a tiny asset footprint and a fixed-step
-physics loop for smooth 60 FPS, zero hardcoded secrets, and a full 2D accessible fallback.
+Engineered against the AWS Well-Architected pillars: a tiny asset footprint and a smooth
+interpolated grid loop for 60 FPS, zero hardcoded secrets, and a full 2D accessible fallback.
 Deployed automatically via GitHub Actions to GitHub Pages on every push to main.`,
         language: {
           name: 'TypeScript',
