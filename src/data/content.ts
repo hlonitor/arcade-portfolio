@@ -69,7 +69,7 @@ Engineered against the AWS Well-Architected pillars: low-poly geometry and code-
 bundles for Performance Efficiency, zero hardcoded secrets for Security, and a full
 2D accessible fallback for Reliability & inclusive access. Deployed automatically via
 GitHub Actions to GitHub Pages on every push to main.`,
-    repoUrl: 'https://github.com/lydron/arcade-portfolio',
+    repoUrl: 'https://github.com/hlonitor/arcade-portfolio',
     worldPos: [0, -6],
     color: '#22d3ee',
   },
@@ -99,7 +99,7 @@ app; used 512-token chunks with 64-token overlap because citation precision matt
 than context breadth for a study tool. Shipped a throwaway Streamlit UI first to validate
 the pipeline, then migrated the frontend. Building the app taught me RAG better than any
 video — and it doubled as a study auditor, surfacing the gaps in my own notes.`,
-    repoUrl: 'https://github.com/lydron/ask-my-notes',
+    repoUrl: 'https://github.com/hlonitor/ask-my-notes',
     demoUrl: 'https://linkedin.com',
     worldPos: [-9, 2],
     color: '#34d399',
